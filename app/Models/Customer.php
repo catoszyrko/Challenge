@@ -1,22 +1,20 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-class Customer
+use Illuminate\Database\Eloquent\Model;
+
+class Customer extends Model
 {
-    private string $dni;
-    private string $firstName;
-    private string $lastName;
+    protected $fillable = ['dni', 'first_name', 'last_name'];
 
-    public function __construct(string $dni, string $firstName, string $lastName)
+    public function cards()
     {
-        $this->dni = $dni;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
+        return $this->hasMany(Card::class);
     }
 
     public function getFullName(): string
     {
-        return $this->firstName . ' ' . $this->lastName;
+        return $this->first_name . ' ' . $this->last_name;
     }
 }
