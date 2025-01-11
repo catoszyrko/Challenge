@@ -64,7 +64,7 @@ class Card extends Model
 
         // Lógica para crear el ticket (solo retornarlo sin mostrar)
         $ticket = [
-            'customer_name' => $this->customer->name . ' ' . $this->customer->surname,
+            'customer_name' => $this->customer->getFullName(),
             'total_amount' => $totalAmount,
             'installment_amount' => $totalAmount / $installments,
             'installments' => $installments,

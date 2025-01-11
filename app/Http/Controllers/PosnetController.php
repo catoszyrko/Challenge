@@ -11,18 +11,15 @@ class PosnetController extends Controller
     public function registerCard(Request $request)
     {
         $request->validate([
-            'dni' => 'required|string',
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
             'number' => 'required|digits:8|unique:cards',
             'type' => 'required|in:VISA,AMEX',
             'bank' => 'required|string',
             'limit' => 'required|numeric|min:0',
+            'customer_id' => 'required',
         ]);
 
         $customer = Customer::firstOrCreate(
-            ['dni' => $request->dni],
-            ['first_name' => $request->first_name, 'last_name' => $request->last_name]
+            ['id' => $request->customer_id]
         );
 
         $card = Card::create([
@@ -39,12 +36,12 @@ class PosnetController extends Controller
     public function doPayment(Request $request)
     {
         $request->validate([
-            'card_number' => 'required|exists:cards,number',
+            'card_id' => 'required|exists:cards,id',
             'amount' => 'required|numeric|min:0',
             'installments' => 'required|integer|min:1|max:6',
         ]);
 
-        $card = Card::where('number', $request->card_number)->first();
+        $card = Card::where('id', $request->card_id)->first();
 
         $extra_percentage = ($request->installments > 1) ? 0.03 * ($request->installments - 1) : 0;
         $total_amount = $request->amount + ($request->amount * $extra_percentage);
@@ -57,7 +54,7 @@ class PosnetController extends Controller
         $card->save();
 
         $ticket = [
-            'customer_name' => $card->customer->first_name . ' ' . $card->customer->last_name,
+            'customer_name' => $card->customer->getFullName(),
             'total_amount' => $total_amount,
             'installment_amount' => $total_amount / $request->installments,
         ];

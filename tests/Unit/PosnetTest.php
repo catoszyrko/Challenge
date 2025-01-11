@@ -32,7 +32,7 @@ class PosnetTest extends TestCase
         $this->assertEquals(70.67, round($result['installment_amount'], 2));
     }
 
-    public function testSuccessfulPaymentAPI()
+    public function testSuccessfulPaymentApi()
     {
         // Crear un cliente
         $customerData = [
@@ -40,12 +40,9 @@ class PosnetTest extends TestCase
             'first_name' => 'John',
             'last_name' => 'Doe',
         ];
-        
-        // Realizar la solicitud para registrar al cliente
-        $response = $this->postJson('/api/cards', $customerData);
-        
-        // Asegúrate de que la respuesta es exitosa
-        $response->assertStatus(201);
+
+        $customer = new Customer($customerData);
+        $customer->save();
         
         // Obtener el cliente creado (esto es solo un ejemplo, asume que la respuesta contiene el id)
         $customer = Customer::first();
@@ -77,9 +74,9 @@ class PosnetTest extends TestCase
         $response->assertStatus(200);
         $result = $response->json();
         
-        $this->assertEquals("John Doe", $result['customer_name']);
-        $this->assertEquals(212.0, $result['total_amount']); // 200 + 3% per installment
-        $this->assertEquals(70.67, round($result['installment_amount'], 2));
+        $this->assertEquals("John Doe", $result['ticket']['customer_name']);
+        $this->assertEquals(212.0, $result['ticket']['total_amount']); // 200 + 3% per installment
+        $this->assertEquals(70.67, round($result['ticket']['installment_amount'], 2));
     }
 
     public function testInsufficientLimit()
