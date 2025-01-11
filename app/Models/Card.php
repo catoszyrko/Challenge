@@ -15,21 +15,10 @@ class Card extends Model
     // Definir los atributos que pueden ser asignados masivamente
     protected $fillable = ['number', 'type', 'bank', 'limit', 'customer_id'];
 
-    // Validación de tipos de tarjeta permitidos
-    const VALID_TYPES = ['Visa', 'AMEX'];
-
-    // Constructor de la tarjeta
-    public function __construct(array $attributes = [])
+    // Relación con el modelo Customer
+    public function customer()
     {
-        parent::__construct($attributes);
-
-        if (!in_array($this->type, self::VALID_TYPES)) {
-            throw new InvalidCardException("Card type {$this->type} is not supported.");
-        }
-
-        if (!preg_match('/^\d{8}$/', $this->number)) {
-            throw new InvalidCardException("Invalid card number format.");
-        }
+        return $this->belongsTo(Customer::class);
     }
 
     // Método para verificar si hay suficiente límite disponible
@@ -47,12 +36,6 @@ class Card extends Model
         } else {
             throw new InsufficientFundsException("Insufficient funds on the card.");
         }
-    }
-
-    // Relación con el modelo Customer
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class);
     }
 
     // Método para procesar un pago

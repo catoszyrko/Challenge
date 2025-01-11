@@ -6,7 +6,13 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Exceptions\\InsufficientFundsException' => $baseDir . '/app/Exceptions/InsufficientFundsException.php',
+    'App\\Exceptions\\InvalidCardException' => $baseDir . '/app/Exceptions/InvalidCardException.php',
+    'App\\Exceptions\\PaymentException' => $baseDir . '/app/Exceptions/PaymentException.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Controllers\\PosnetController' => $baseDir . '/app/Http/Controllers/PosnetController.php',
+    'App\\Models\\Card' => $baseDir . '/app/Models/Card.php',
+    'App\\Models\\Customer' => $baseDir . '/app/Models/Customer.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
